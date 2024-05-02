@@ -1,5 +1,4 @@
-import { useEffect } from "react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 const App = () => {
@@ -12,7 +11,8 @@ const App = () => {
   })
 
   useEffect(()=>{
-    if(theme === 'dark'){
+    const themeUser = localStorage.getItem('themeUser')
+    if(themeUser === 'dark'){
       document.querySelector('html').classList.add('dark')
     }else{
       document.querySelector('html').classList.remove('dark')
@@ -21,6 +21,7 @@ const App = () => {
 
   const handleChangeTheme = () =>{
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light')
+    localStorage.setItem('themeUser',theme)
   }
   return (
     <div className='h-screen flex justify-center items-center dark:bg-neutral-900'>
