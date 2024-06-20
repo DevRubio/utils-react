@@ -20,6 +20,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils"
 import { format } from "date-fns"
 import { CalendarIcon } from "@radix-ui/react-icons"
+import { Switch } from "@/components/ui/switch"
 
 const formSchema = z.object({
   username: z.string().min(2).max(20),
@@ -28,6 +29,10 @@ const formSchema = z.object({
   dateOfBirth: z.date({
     required_error: "A date of birth is required.",
   }),
+  marketing_emails: z.boolean().default(false)
+}).refine((data) =>data.marketing_emails === true, {
+  message: "You must accept the marketing emails policy.",
+  path: ["marketing_emails"]
 })
 
 export default function Page() {
@@ -49,7 +54,7 @@ export default function Page() {
   return (
     <div>
        <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-2 gap-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 
         {/* UserName */}
         <FormField
@@ -166,6 +171,29 @@ export default function Page() {
             </FormItem>
           )}
         />
+
+
+        {/* MarketingEmails */}	
+        <FormField
+              control={form.control}
+              name="marketing_emails"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm col-span-1 sm:col-span-2">
+                  <div className="space-y-0.5">
+                    <FormLabel>Marketing emails</FormLabel>
+                    <FormDescription>
+                      Receive emails about new products, features, and more.
+                    </FormDescription>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
+            />
 
           { /* Submit */}
         <Button type="submit">Submit</Button>
